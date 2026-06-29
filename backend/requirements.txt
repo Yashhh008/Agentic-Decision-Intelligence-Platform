@@ -1,0 +1,28 @@
+# ADIP Backend Dependencies
+# Python 3.11+
+
+# ── Web Framework ────────────────────────────────────────────────────────────
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+python-multipart>=0.0.9
+
+# ── Data Validation ──────────────────────────────────────────────────────────
+pydantic>=2.7.1
+pydantic-settings>=2.2.1
+
+# ── Database ─────────────────────────────────────────────────────────────────
+sqlalchemy>=2.0.30
+
+# ── AI / LLM ─────────────────────────────────────────────────────────────────
+google-genai>=1.20.0
+langgraph>=0.1.4
+langchain-core>=0.2.1
+
+# ── Embeddings & Vector Store ─────────────────────────────────────────────────
+sentence-transformers>=3.0.0
+faiss-cpu>=1.9.0.post1
+
+# ── Utilities ────────────────────────────────────────────────────────────────
+python-dotenv>=1.0.1
+httpx>=0.28.1
+tenacity>=8.3.0

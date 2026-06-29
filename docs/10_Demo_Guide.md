@@ -1,511 +1,600 @@
-I think **10_Demo_Guide.md** is arguably the **most important document** after the architecture.
+# ADIP — Hackathon Demo & Presentation Guide
 
-Here's why.
-
-The judges won't read all your code.
-
-They'll spend roughly:
-
-* **5 minutes** watching your product.
-* **5 minutes** listening to your architecture.
-
-Those **10 minutes determine your ranking.**
-
-So this document should optimize for **judge psychology**, not just project features.
+> **Judging weights: 70% Agentic AI Architecture · 30% Business Use Case**
+>
+> This guide is engineered for those weights. Every second of both videos is intentional.
 
 ---
 
-# One thing I want to change
+## The Judge's Mindset
 
-Most teams will demo like this:
+Judges are evaluating hundreds of submissions. They will remember you for **one thing**.
 
-```text
-Open app
+Make that one thing:
 
-↓
+> *"This team built a real platform — not a chatbot with an API key."*
 
-Paste transcript
+The way you earn that impression is by **showing architecture live**, not describing it in slides.
 
-↓
+---
 
-Click Analyze
+# VIDEO 1 — 5-Minute Product Demo
 
-↓
+## Objective
 
-AI gives recommendation
+Prove that ADIP solves a real enterprise problem with an AI system that is:
+- Multi-agent (not one LLM call)
+- Evidence-grounded (not hallucinating)
+- Explainable (not a black box)
+- Human-controlled (not autonomous)
+
+## Pre-Recording Checklist
+
+- [ ] Backend running: `uvicorn backend.main:app --reload --port 8000`
+- [ ] Frontend running: `npm run dev`
+- [ ] Browser open at `http://localhost:5174` — Dashboard tab visible
+- [ ] Memory pre-seeded: `python -m backend.scripts.seed_demo_memory`
+- [ ] Zoom browser to 110% — text must be readable in recording
+- [ ] Close all other browser tabs and notifications
+- [ ] Use a screen recorder at 1080p minimum (OBS, Loom, or Screencastify)
+
+---
+
+## Scene-by-Scene Script (5 min 00 sec)
+
+---
+
+### SCENE 1 — The Problem (0:00 – 0:35)
+
+**Show:** Dashboard overview. Do not click anything yet.
+
+**Say:**
+
+> "Every enterprise Customer Success team manages hundreds of accounts simultaneously. Each customer generates emails, meeting notes, CRM updates, support tickets — all unstructured text. The CSM has to read all of it, recall prior decisions, cross-reference internal playbooks, and decide: what's the next best action for this account?
+>
+> That process is slow, inconsistent, and depends entirely on individual experience. When a team member leaves, that knowledge walks out the door.
+>
+> ADIP solves this with a multi-agent AI platform that transforms fragmented customer signals into ranked, evidence-backed recommendations — with humans always in control."
+
+**Why this works:** You've told judges *why this exists* before showing a single feature. They now care.
+
+---
+
+### SCENE 2 — The Portfolio View (0:35 – 1:00)
+
+**Show:** Dashboard. Point to the 4 KPI cards, then slowly scan the customer table.
+
+**Say:**
+
+> "The dashboard gives a Customer Success team real-time visibility across their entire portfolio. Health scores, adoption rates, renewal dates, ARR — all in one place. The system has already identified Acme Corp as Critical — health score 32, renewal in 18 days, only 8 of 25 licensed seats active."
+
+**Click Acme Corp's "Analyze" button.**
+
+---
+
+### SCENE 3 — Customer Context (1:00 – 1:20)
+
+**Show:** Decision Workspace — Customer Header with health ring, stats bar, agent pipeline (idle state).
+
+**Say:**
+
+> "The Decision Workspace loads the full customer context. Notice the agent pipeline at the top — six specialized agents are standing by. None of them have run yet. That's by design: the system doesn't execute every agent on every customer. A Dynamic Planner will decide which agents are relevant to *this* customer's situation."
+
+---
+
+### SCENE 4 — Input & Analysis Trigger (1:20 – 1:50)
+
+**Show:** Interaction input panel with the pre-filled Acme Corp transcript.
+
+**Say:**
+
+> "A CSM pastes a meeting transcript into the workspace. This is direct voice-of-customer: Acme's operations manager is explicitly saying adoption is failing, support tickets are unresolved, and they're unsure about renewal."
+
+**Click "Run AI Analysis". Start narrating while the pipeline animates.**
+
+---
+
+### SCENE 5 — Live Pipeline (1:50 – 2:30) ← MOST IMPORTANT SCENE
+
+**Show:** Agent pipeline nodes lighting up one by one. Point to each as it activates.
+
+**Say — narrate as each node glows:**
+
+> "Watch the pipeline execute live.
+>
+> First — the **Context Agent** extracts structured business signals from the raw text. It's detecting churn risk, low adoption, renewal risk, and dissatisfaction — not keywords, semantic signals.
+>
+> Next — **Organizational Memory** is queried. The system already knows this customer had onboarding training two weeks ago, and a Business Value Review last week. This prevents the AI from recommending actions already taken.
+>
+> Now — the **Dynamic Planner**. This is where LangGraph orchestration comes in. The Planner analyzes the signals and *decides* which agents need to run. It's not executing all six agents — it's building a targeted execution plan."
+
+**When Planner Panel appears — PAUSE. Point to it explicitly.**
+
+> "Here — the Planner Panel shows you exactly what it decided: Risk Agent and Renewal Agent activated because of the churn and renewal signals. The Opportunity Agent was skipped because there's no upsell signal in this account. This transparency is a core design principle — you can always explain *why* the system did what it did."
+
+---
+
+### SCENE 6 — Retrieved Evidence (2:30 – 3:00)
+
+**Show:** Retrieved Knowledge panel on the right.
+
+**Say:**
+
+> "While agents ran, the **Retrieval Agent** searched our FAISS vector index — 163 chunks from 31 enterprise documents: playbooks, CRM notes, email threads, support tickets, product documentation, internal policies.
+>
+> Every recommendation will be grounded in this evidence — not generated from the LLM's imagination."
+
+**Point to the highest-match chunk.**
+
+> "Here's the Churn Prevention Playbook retrieved at 87% similarity. The recommendation engine will use this as primary evidence."
+
+---
+
+### SCENE 7 — Recommendations & HITL (3:00 – 4:00)
+
+**Show:** Recommendation cards. Read the top one. Expand evidence.
+
+**Say:**
+
+> "The platform has generated three ranked recommendations. Each one shows: the action, priority level, a confidence score — calculated mathematically, not by the LLM — and the business rule that was triggered.
+>
+> This recommendation to escalate to executive engagement — confidence 91% — was triggered by our internal policy: 'Renewal within 30 days, health score below 40, two unresolved critical tickets — executive outreach required.'
+>
+> Let me expand the evidence."
+
+**Click "Show reasoning & evidence".**
+
+> "The recommendation cites the Churn Prevention Playbook, the Acme Corp email thread where the customer explicitly mentioned competitors, and the escalation policy. This is not a guess — it's a justified decision."
+
+**Click Approve on the top recommendation.**
+
+> "The CSM approves. This decision is now logged to organizational memory."
+
+---
+
+### SCENE 8 — Memory Loop (4:00 – 4:40) ← THE WOW MOMENT
+
+**Show:** Organizational Memory panel updating in real-time.
+
+**Say:**
+
+> "Watch the memory timeline. The approval just created a new record. Now — here's what makes this a *platform* and not just a tool."
+
+**Clear the transcript. Type a shorter, second version:**
+> *"Follow-up call with Acme Corp. Team says they appreciated the executive outreach but onboarding training hasn't resolved the adoption problem. Still at risk."*
+
+**Click Run AI Analysis again.**
+
+> "I'm running analysis a second time on the same customer. The system retrieves the memory — it knows we already did onboarding training, already did the BVR, already initiated executive contact. Watch what it recommends now."
+
+**When recommendations appear:**
+
+> "The platform adapted. It's no longer recommending what we already did. It's escalating: bring in the Churn Prevention Specialist, trigger the 48-hour SLA policy, propose a retention offer. The system *learned* from the human decision. That's organizational memory in action."
+
+---
+
+### SCENE 9 — Closing (4:40 – 5:00)
+
+**Show:** Switch to Platform Insights tab.
+
+**Say:**
+
+> "ADIP is more than a recommendation tool. It's a reusable enterprise platform. The same agent framework, planner, and memory layer can be applied to Sales, HR, Finance, or any decision-heavy domain — by adding new agents and knowledge sources without changing the core architecture.
+>
+> This is ADIP: Agentic Decision Intelligence Platform."
+
+---
+
+# VIDEO 2 — 5-Minute Architecture Walkthrough
+
+## Objective
+
+Convince judges — who are weighting architecture at **70%** — that you understand:
+1. Why multi-agent over a single LLM
+2. How the planner works
+3. What makes RAG grounded
+4. Why confidence is deterministic
+5. What the memory loop achieves architecturally
+
+**Show the architecture diagram throughout this video. Keep it on screen.**
+
+---
+
+## Architecture Script (5 min)
+
+---
+
+### SECTION 1 — Design Philosophy (0:00 – 0:40)
+
+**Show:** Architecture diagram (`docs/architecture.png`). Keep it visible.
+
+**Say:**
+
+> "The core design principle of ADIP is separation of concerns across agents. We never put business logic in a single LLM prompt. We never let one agent call another directly. All communication flows through a shared state object — ADIPState — which is the single source of truth throughout the pipeline.
+>
+> This makes the system modular, testable, and extensible. You can add a new agent to the registry without touching any existing code."
+
+---
+
+### SECTION 2 — Context Agent + Signal Extraction (0:40 – 1:10)
+
+**Show:** Point to Context Agent in diagram. Open `backend/agents/context_agent.py`.
+
+**Say:**
+
+> "The pipeline starts with the Context Agent. Its only job is structured signal extraction from raw text. It outputs typed signals — churn_risk, low_adoption, renewal_risk — using a schema-validated LLM call. If the LLM returns malformed output, we retry up to three times before failing gracefully.
+>
+> We deliberately keep this agent narrow. It doesn't analyze, recommend, or reason about business outcomes — it only classifies."
+
+---
+
+### SECTION 3 — Dynamic Planner (1:10 – 2:00) ← MOST IMPORTANT FOR JUDGES
+
+**Show:** Point to Planner in diagram. Show Planner Panel in the UI.
+
+**Say:**
+
+> "The Dynamic Planner is the architectural centerpiece. After signal extraction, it uses an LLM call to build an ExecutionPlan — a structured JSON object that specifies exactly which agents to run, in what order, and why.
+>
+> This is not hard-coded routing. The Planner reasons about the detected signals and selects capabilities dynamically. For a customer with churn risk and renewal pressure, it activates the Risk Agent and Renewal Agent. For a healthy customer with expansion signals, it activates the Opportunity Agent instead.
+>
+> This is what makes ADIP an *agentic* system, not a pipeline. The execution graph adapts to context."
+
+**Show the Planner Panel in the running UI:**
+
+> "In the Planner Decision Panel, you can see exactly what the Planner decided — detected signals, activated agents, skipped agents, and its full reasoning. This transparency was a deliberate architectural choice. Every decision in the system must be auditable."
+
+---
+
+### SECTION 4 — Agent Framework (2:00 – 2:35)
+
+**Show:** `backend/core/` directory structure.
+
+**Say:**
+
+> "All agents inherit from BaseAgent and are registered in the AgentRegistry. Each agent receives the shared ADIPState, reads from it, writes its output back to it, and returns. Agents never communicate with each other — only through state.
+>
+> The ExecutionEngine reads the Planner's output and runs selected agents in order, aggregating their insights into the shared state. This keeps execution deterministic and reproducible."
+
+---
+
+### SECTION 5 — RAG Architecture (2:35 – 3:10)
+
+**Show:** `backend/vectorstore/` and the Retrieved Knowledge panel.
+
+**Say:**
+
+> "The Retrieval Agent uses FAISS for similarity search across 163 chunks from 31 enterprise documents — playbooks, CRM notes, email threads, support tickets, release notes, and internal policies. Each chunk carries metadata: document type, customer ID, source file, creation date.
+>
+> We use sentence-transformers all-MiniLM-L6-v2 for embeddings — fast, offline, no API dependency. The retrieval result is injected into the RecommendationAgent's prompt as structured evidence, so recommendations are grounded in real organizational knowledge, not model weights."
+
+---
+
+### SECTION 6 — Business Rules + Confidence Engine (3:10 – 3:45)
+
+**Show:** `backend/engine/` directory. Show a recommendation card's confidence % and business rule badge.
+
+**Say:**
+
+> "Two components run after agents complete, and both are 100% deterministic — no LLM involved.
+>
+> The Business Rules Engine evaluates threshold conditions against the customer's data and the detected signals. If health score is below 40 and renewal is within 30 days — a critical escalation rule fires. These rules cannot be hallucinated.
+>
+> The Confidence Engine scores each recommendation using a four-factor formula: signal strength, evidence quality, customer health, and rule alignment. The score is mathematical. A CSM can always verify why a recommendation has 91% confidence — it's not an LLM's gut feeling."
+
+---
+
+### SECTION 7 — Memory Layer (3:45 – 4:20) ← SHOWS ARCHITECTURAL SOPHISTICATION
+
+**Show:** Memory timeline in the UI. Point to `backend/services/memory_service.py`.
+
+**Say:**
+
+> "Organizational memory is the feature that separates a decision tool from a decision intelligence platform.
+>
+> When a CSM approves or rejects a recommendation, that decision is persisted to SQLite with full context: the action, the decision, the outcome, the detected signals. On every subsequent analysis for the same customer, this history is retrieved and injected into the Planner's context.
+>
+> The Planner can then avoid repeating actions already taken, escalate when prior interventions failed, and adapt its execution plan based on institutional knowledge. This is the learning loop — it improves with every human decision."
+
+---
+
+### SECTION 8 — Extensibility & Reusability (4:20 – 5:00)
+
+**Show:** Full architecture diagram again.
+
+**Say:**
+
+> "Every design decision in ADIP optimized for reusability. The Planner, Agent Registry, Execution Engine, Business Rules Engine, Confidence Engine, and Memory Layer are domain-agnostic. They don't know anything about Customer Success.
+>
+> To apply this platform to Sales: add a QuotaRiskAgent and PipelineAgent, load sales playbooks into the knowledge base, define new business rules. The rest of the architecture is unchanged.
+>
+> To apply it to HR: add a RetentionRiskAgent and PerformanceAgent. Same framework.
+>
+> That's the architectural thesis: ADIP is not a Customer Success tool. It's an enterprise-grade Agentic Decision Intelligence Platform that happens to be running Customer Success as its first domain."
+
+---
+
+# GitHub Repository Guide
+
+## What Judges Look For in the Repo
+
+1. **README is the landing page** — it must hook them in 30 seconds
+2. **Clean structure** — they shouldn't have to hunt for files
+3. **Working setup** — if they can't run it, it hurts your score
+4. **Architecture evidence** — they want to see the sophistication is real
+
+## Pre-Submission Repository Checklist
+
+- [ ] README displays architecture diagram correctly on GitHub
+- [ ] All API keys removed from committed files (check `.env` is in `.gitignore`)
+- [ ] `docs/` folder contains `architecture.png` and all 12 documentation files
+- [ ] `backend/requirements.txt` is accurate and complete
+- [ ] `backend/knowledge/enterprise/` contains all 31 documents
+- [ ] `backend/vectorstore/index/` — commit the pre-built FAISS index (saves setup time for judges)
+- [ ] `render.yaml` and `frontend/vercel.json` deployment configs present
+- [ ] README quick-start works with exactly those commands
+
+## Optional: Add These to GitHub README Top
+
+Add GitHub topic tags to your repo:
+```
+langgraph  multi-agent  rag  fastapi  react  enterprise-ai  decision-intelligence
 ```
 
-That's boring.
+---
 
-Instead we'll tell a story.
+# Judging Criteria Response Map
+
+## 70% — Agentic AI Platform Architecture
+
+| What They Assess | Where You Show It |
+|---|---|
+| Multi-agent orchestration | Planner Panel — selected vs. skipped agents |
+| Dynamic planning | Architecture walkthrough Section 3 |
+| RAG implementation | Retrieved Knowledge panel + Section 5 |
+| Deterministic components | Confidence % badge + business rule badge |
+| Memory / learning loop | Demo Scene 8 — second run changes recommendations |
+| Code quality | `backend/core/`, `backend/engine/`, `backend/agents/` |
+| Extensibility | Architecture walkthrough Section 8 |
+
+## 30% — Business Understanding & Use Case
+
+| What They Assess | Where You Show It |
+|---|---|
+| Real problem statement | Demo Scene 1 (opening 35 seconds) |
+| Enterprise relevance | 4 customer personas, real signals, real scenarios |
+| Human-in-the-loop rationale | "Business decisions have financial consequences" |
+| Evidence-based decisions | RAG evidence sourcing in recommendation cards |
+| Platform reusability claim | "Customer Success is module 1 of N" |
 
 ---
 
-# Storytelling Flow
+# Phrases That Win
 
-Instead of
+Use these during the demo and architecture walkthrough:
 
-> "Here is our project..."
-
-Start with
-
-> **Imagine you're a Customer Success Manager handling hundreds of enterprise customers every month. Every interaction generates emails, CRM updates, meeting transcripts, support tickets, and product documentation. Deciding the next best action becomes overwhelming. That's exactly the problem ADIP solves.**
-
-Now judges understand the problem before seeing the solution.
+| Instead of... | Say... |
+|---|---|
+| "We use LangGraph" | "LangGraph orchestrates the execution graph; the Planner generates the plan dynamically at runtime" |
+| "We call Gemini" | "The Context Agent makes a schema-validated LLM call with retry logic and graceful fallback" |
+| "The AI recommends actions" | "The Intelligence Fusion Engine consolidates multi-agent insights; the Confidence Engine scores them deterministically" |
+| "It remembers past decisions" | "Organizational memory persists approved decisions and injects them into the Planner's context on future analyses" |
+| "You can approve or reject" | "The Human-in-the-Loop workflow ensures every AI recommendation requires explicit human authorization before any action is taken" |
 
 ---
 
-# Another improvement
+# The Single Most Impressive Moment
 
-Don't start with the dashboard.
+Run the analysis once. Approve a recommendation. Run it again with a follow-up transcript.
 
-Start with
+When the recommendations change because memory influenced the Planner — **pause**. Let the judges absorb it.
 
-```text
-Problem
+Then say:
 
-↓
+> "The platform just demonstrated adaptive organizational decision intelligence. It didn't repeat what was already tried. It escalated because the prior intervention was insufficient. This is what separates ADIP from a recommendation chatbot — it learns from the humans who use it."
 
-Architecture
+That sentence, delivered confidently at the right moment, wins the demo round.
 
-↓
+---
 
-Demo
+---
 
-↓
+# ALTERNATE DEMO — Buildify Customer (Onboarding Friction + Expansion Opportunity)
 
-Memory
+> Use this version if you want to demo a **different customer arc** — showing
+> onboarding friction and feature confusion rather than churn. Buildify is a
+> construction company in Month 3 of onboarding: office staff fully adopted,
+> but 18 field workers completely bypassing the platform. Champion Tom Reeves
+> is engaged and motivated, but under CEO pressure to show ROI.
+> This scenario resonates with any B2B SaaS evaluator.
 
-↓
+---
 
-Platform
+## Why Buildify Is a Strong Demo Choice
 
-↓
+| Signal | Why It Matters to Judges |
+|---|---|
+| `onboarding_friction` | Shows signal variety — Planner activates different agents than churn scenario |
+| `low_adoption` | Adoption intelligence is a different problem from retention |
+| `feature_confusion` | Platform understands nuanced, non-obvious customer problems |
+| Dual signals in one conversation | Complaint contains hidden expansion opportunity — AI catches it; human might miss it |
+| Clean memory loop | Run 2 visibly avoids repeating training/CEO summary already approved in Run 1 |
 
-Future
+---
+
+## Pre-Demo Setup for Buildify
+
+1. Select **Buildify** from the sidebar
+2. Clear any previous session text
+3. Have **Interaction 1** text ready to paste (copy from below)
+4. After approving recommendations, have **Interaction 2** ready for the memory loop
+
+---
+
+## INTERACTION 1 — Month 3 Check-in Call
+
+### Paste into "Customer Interaction Input" (Type: `meeting_transcript`)
+
+```
+Month 3 onboarding check-in with Tom Reeves, Operations Manager at Buildify.
+
+Tom: "Aisha, the office team is fully using the platform — our project managers 
+love it, pipeline reporting is great. But my field crew, the guys actually 
+on-site doing the work — they haven't touched it. They're still logging jobs 
+on paper and sending me photos of handwritten notes at end of day.
+
+The problem is they're on phones all day, not laptops, and they find the app 
+confusing. My foreman said it takes him 10 minutes to log a job update — he 
+used to do it in 30 seconds on a sticky note. If it's harder than paper, 
+they won't use it. Simple as that.
+
+We're also still waiting on the Procore integration. My field team lives in 
+Procore for project tracking. Until NimbusCRM talks to Procore, I'm asking 
+them to switch between two systems — that's never going to work.
+
+I believe in this platform — the office side proves the value. But Linda, 
+our CEO, asked me last week in an all-hands what we're getting for $36k a year. 
+I didn't have a strong answer. I need to show her something real before my 
+next leadership meeting."
 ```
 
-This feels like a startup pitch.
+---
+
+### What to say while analysis runs — narrate the pipeline:
+
+> "Buildify is in Month 3 of onboarding — 12 of 30 licensed seats active, 40% adoption against a 60% benchmark. Tom Reeves is an engaged champion, but 18 field workers have completely bypassed the platform because the workflow doesn't fit how they work.
+>
+> Watch the Context Agent classify this conversation. It's not pattern-matching keywords — it's understanding that the field team friction is an `onboarding_friction` signal, the workflow complexity is `feature_confusion`, and the CEO ROI question buried at the end is actually an `expansion_interest` signal. A CSM reading this quickly would focus on the complaint and miss the CEO angle entirely.
+>
+> Now the Planner: it's detected two signal types — an adoption problem AND an executive opportunity. Watch which agents it selects."
+
+**When Planner Panel appears — point to it:**
+
+> "The Planner activated the Risk Agent for adoption risk and — notice — the Opportunity Agent for the CEO expansion signal. It also activated the Retrieval Agent to search our knowledge base for relevant onboarding playbooks, mobile app guides, and expansion strategy documents. The Renewal Agent was skipped — renewal is December, not urgent."
 
 ---
 
-# Another improvement
+### Expected recommendations — what to say about each:
 
-Most teams never show architecture while demoing.
+**Recommendation 1 — HIGH priority (80% confidence)**
+> Initiate a formal expansion discovery call with CEO Linda Walsh regarding the three new office locations.
 
-We should.
+**Say:**
+> "The Opportunity Agent identified the CEO expansion potential. The Confidence Engine scored this at 80% because it aligned with our expansion strategy playbook and the direct CEO interest signal. The platform caught this strategic opportunity early during onboarding."
 
-When Planner runs
+**Recommendation 2 — MEDIUM priority (79% confidence) | Rule: LOW_ADOPTION**
+> Develop and deliver a simplified, non-technical 'Quick Start' guide specifically for field workers to supplement the existing video series.
 
-pause.
+**Say:**
+> "This was triggered by the Business Rules Engine under the `LOW_ADOPTION` rule. Because our active seat count is below the 60% threshold, the system automatically generated this targeted remediation to resolve onboarding friction."
 
-Explain
+**Recommendation 3 — MEDIUM priority (78% confidence) | Rule: LOW_ADOPTION**
+> Conduct a value-realization review with Tom Reeves to map the Procore integration progress to specific field workforce KPIs.
 
-> Planner analyzed customer signals...
+**Say:**
+> "Also triggered by the `LOW_ADOPTION` rule. Instead of a generic status meeting, it specifies mapping the integration progress to concrete field workforce KPIs, ensuring the business value is clear before the CEO's next leadership review."
 
-Then show Planner Panel.
-
-Judges love this.
-
----
-
-# Another improvement
-
-Show memory twice.
-
-Run
-
-Customer
-
-↓
-
-Recommendation
-
-↓
-
-Approve
-
-↓
-
-Memory updated
-
-Then
-
-Run again.
-
-Memory changes recommendation.
-
-That one moment demonstrates
-
-> Learning
-
-Much more impressive than another feature.
+**Approve Recommendations 1 and 2.** Say: *"The CSM approves. Both decisions are now logged to organizational memory."*
 
 ---
 
-# Another improvement
+## INTERACTION 2 — CRM Update (2 Weeks Later)
 
-During architecture walkthrough
+> This is the memory loop moment. Run this immediately after approving Run 1 recommendations.
+> The platform will visibly change its behaviour because it remembers what was already done.
 
-Never say
+### Paste into "Customer Interaction Input" (Type: `crm_update`)
 
-> We use LangGraph.
+```
+CRM Update — Buildify — June 19, 2026
 
-Instead say
+On-site training completed this morning at Buildify Sacramento yard. Tom Reeves 
+hosted 14 field workers. NimbusCRM trainer demonstrated mobile app offline mode 
+and the simplified job logging workflow — reduced from 10 minutes to under 2 minutes.
 
-> LangGraph orchestrates execution while the Planner dynamically generates execution plans based on detected business capabilities.
+Post-session: 9 of 14 field workers committed to trying the platform this week. 
+5 senior foremen still resistant — prefer paper-based tracking, skeptical of 
+any digital tool.
 
-Much stronger.
+Seat count updated: 18 of 30 active (up from 12). Adoption now at 60% — 
+hit the Month 3 benchmark.
 
----
+Procore integration: still blocked. Buildify IT access provisioning unresolved.
 
-# Here is the document.
+New development: Linda Walsh (CEO) mentioned to Tom that she is keynoting at 
+the Western Construction Technology Summit next month and wants to feature 
+Buildify's NimbusCRM rollout as a digital transformation success story. She 
+asked Tom if NimbusCRM could provide materials or a case study.
 
----
-
-# 10_Demo_Guide.md
-
-# Demo Guide & Architecture Walkthrough
-
-Version 1.0
-
----
-
-# 1. Objective
-
-The goal of the demonstration is not to showcase every feature.
-
-The goal is to convince judges that **ADIP is a reusable enterprise Agentic Decision Intelligence Platform** rather than a simple AI chatbot.
-
-The demo should emphasize:
-
-* Platform architecture
-* Agent orchestration
-* Explainability
-* Human oversight
-* Enterprise relevance
-* Reusability
-
----
-
-# 2. Demo Timeline (10 Minutes)
-
-| Time         | Section                  |
-| ------------ | ------------------------ |
-| 0:00 – 1:00  | Problem Statement        |
-| 1:00 – 2:00  | Platform Overview        |
-| 2:00 – 5:30  | Live Product Demo        |
-| 5:30 – 8:30  | Architecture Walkthrough |
-| 8:30 – 9:30  | Learning & Memory        |
-| 9:30 – 10:00 | Future Vision & Closing  |
-
----
-
-# 3. Opening Script (0:00–1:00)
-
-> Imagine you're a Customer Success Manager responsible for hundreds of enterprise accounts. Every day you're flooded with meeting notes, CRM updates, support tickets, emails, product documentation, and internal playbooks. Deciding the next best action for each customer becomes slow, inconsistent, and heavily dependent on individual experience.
-
-> ADIP—Agentic Decision Intelligence Platform—solves this by orchestrating multiple AI agents that retrieve organizational knowledge, analyze customer context, and generate explainable, evidence-backed recommendations while always keeping a human in control.
-
----
-
-# 4. Platform Overview (1:00–2:00)
-
-Show the home dashboard.
-
-Explain:
-
-* Customer list
-* Health scores
-* Customer overview
-* Decision Workspace
-
-Mention:
-
-> Customer Success is our first implemented module, but the platform architecture is reusable across Sales, HR, Finance, and Operations.
-
----
-
-# 5. Live Product Demo (2:00–5:30)
-
-## Step 1 — Select Customer
-
-Choose:
-
-**Acme Corp**
-
-Explain:
-
-* Health Score: 32
-* Renewal in 20 days
-* Low adoption
-* Missed recent check-ins
-
----
-
-## Step 2 — Provide Interaction
-
-Paste a meeting transcript.
-
-Example:
-
-> "We're struggling with onboarding, adoption is low, and we're unsure whether we'll renew unless things improve."
-
----
-
-## Step 3 — Start Analysis
-
-Click **Analyze**.
-
-While processing, explain the workflow:
-
-1. Context Extraction
-2. Planner
-3. Retrieval
-4. Specialized Agents
-5. Intelligence Fusion
-6. Recommendation Engine
-7. Confidence Engine
-
----
-
-## Step 4 — Planner Panel
-
-Pause here.
-
-Show:
-
-* Detected Signals
-* Execution Plan
-* Selected Agents
-* Skipped Agents
-
-Explain:
-
-> The Planner doesn't execute business logic. It determines which capabilities are needed and builds an execution plan for the Execution Engine.
-
----
-
-## Step 5 — Retrieved Knowledge
-
-Show evidence:
-
-* CRM Notes
-* Churn Playbook
-* Product Onboarding Guide
-* Previous Meeting Notes
-* Support Ticket
-
-Emphasize:
-
-> Recommendations are grounded in enterprise knowledge rather than generated from the LLM alone.
-
----
-
-## Step 6 — Recommendations
-
-Display ranked recommendation cards.
-
-Each should include:
-
-* Action
-* Priority
-* Confidence
-* Evidence
-* Reasoning
-* Business Rule
-
-Example:
-
-**Recommendation 1**
-
-Schedule an executive onboarding session.
-
-Confidence: 91%
-
-Evidence:
-
-* Customer onboarding playbook
-* CRM notes
-* Recent meeting transcript
-
----
-
-## Step 7 — Human Approval
-
-Approve one recommendation.
-
-Explain:
-
-> Humans remain in control. AI recommends; users decide.
-
----
-
-## Step 8 — Memory Update
-
-Show the Memory Timeline.
-
-Explain:
-
-> The platform records the decision and uses it as organizational memory for future analyses.
-
----
-
-# 6. Architecture Walkthrough (5:30–8:30)
-
-Display the architecture diagram.
-
-Explain the flow:
-
-```text
-User Interaction
-        ↓
-Context Extraction
-        ↓
-Planner
-        ↓
-Execution Plan
-        ↓
-Execution Engine
-        ↓
-Specialized Agents
-        ↓
-Intelligence Fusion Engine
-        ↓
-Recommendation Engine
-        ↓
-Confidence Engine
-        ↓
-Human Approval
-        ↓
-Memory
+Tom also mentioned Linda is planning to open 3 new regional offices in 2027 — 
+each would need its own NimbusCRM license. Potential expansion ARR: $108k.
 ```
 
-Highlight:
+---
 
-* Planner orchestrates
-* Agents specialize
-* Fusion Engine combines intelligence
-* Memory influences future decisions
+### What to say before clicking Run AI Analysis:
+
+> "Two weeks have passed. The on-site training happened — adoption jumped from 40% to 60%, hitting the benchmark. CEO summary was delivered. But a completely new, high-value signal has appeared in a routine CRM update: the CEO is about to speak at a public industry conference and wants to showcase this rollout. And there's a $108k expansion opportunity sitting inside three lines of a status update.
+>
+> Let me run the analysis again and show you what the platform does differently."
 
 ---
 
-# 7. Memory Demonstration (8:30–9:30)
+### After clicking — narrate:
 
-Run the same customer again.
-
-Show that the platform retrieves previous decisions.
-
-Example:
-
-> Previously, onboarding training was approved. The planner recognizes this and prioritizes renewal preparation instead of recommending the same onboarding action again.
-
-This demonstrates adaptive decision-making.
+> "The Planner is querying memory before deciding which agents to run. It sees: on-site training was approved and completed. CEO executive summary was approved. It will NOT recommend those again.
+>
+> Watch the execution plan shift. The Planner is now treating this as a high-priority expansion scenario — the Opportunity Agent becomes the lead agent. The Risk Agent is secondary — 5 foremen still resistant. The Renewal Agent is still skipped — December is far out. Completely different plan from Run 1, for the same customer."
 
 ---
 
-# 8. Closing (9:30–10:00)
+### Expected new recommendations — very different from Run 1:
 
-Summarize:
+**Recommendation 1 — CRITICAL priority (~93% confidence)**
+> Immediately escalate Procore integration to VP of Engineering. CEO Linda Walsh is presenting the NimbusCRM rollout at a public conference in under 30 days. An unresolved integration failure during a public endorsement is a reputational risk for NimbusCRM.
 
-* Reusable platform
-* Explainable AI
-* Enterprise architecture
-* Human-in-the-loop
-* Multi-source RAG
-* Memory-driven decision intelligence
+**Say:**
+> "The Business Rules Engine fired a new rule that didn't exist in Run 1: 'CEO public commitment + unresolved critical integration = VP-level escalation.' The context changed, the rule fired. This is not the LLM being creative — this is a deterministic threshold being crossed."
 
-Finish with:
+**Recommendation 2 — HIGH priority (~89% confidence)**
+> Engage CEO Linda Walsh directly with a co-marketing proposal: offer an official NimbusCRM case study, conference speaking support, and reference customer program membership in exchange for a formal reference agreement.
 
-> ADIP is more than an AI assistant—it is a reusable Agentic Decision Intelligence Platform that transforms fragmented enterprise knowledge into actionable, explainable business decisions.
+**Say:**
+> "The Opportunity Agent identified this as an expansion_interest signal of the highest order. The expansion ARR — $108k from three new offices — combined with the CEO's public visibility at an industry summit creates a strategic account moment. A reactive CSM sends a congratulations email. An intelligent platform converts this into a reference customer agreement."
 
----
+**Recommendation 3 — MEDIUM priority (~71% confidence)**
+> Design a targeted 1-on-1 micro-training for the 5 resistant senior foremen — focus exclusively on the 2-minute mobile logging workflow, delivered individually rather than in a group.
 
-# 9. Architecture Talking Points
-
-Avoid saying:
-
-> "We call Gemini multiple times."
-
-Instead say:
-
-* Planner generates execution plans.
-* Agent Registry enables capability-based orchestration.
-* Retrieval Agent grounds reasoning in enterprise knowledge.
-* Intelligence Fusion Engine consolidates insights.
-* Business Rules provide deterministic validation.
-* Confidence Engine explains recommendation quality.
-* Memory continuously improves future analyses.
+**Say:**
+> "The platform remembered 5 foremen are still resistant. Instead of recommending a general training session — which already happened — it generated a targeted intervention for the specific cohort still not adopted. Same problem, more precise action."
 
 ---
 
-# 10. Expected Judge Questions
+## The Closing Line for This Scenario
 
-### Q1: Why multiple agents instead of one LLM?
+After showing Run 2:
 
-**Answer:** Different agents specialize in distinct business capabilities, making the platform more modular, reusable, explainable, and easier to extend.
-
----
-
-### Q2: Why RAG?
-
-**Answer:** Enterprise knowledge changes frequently. RAG ensures recommendations are based on the latest internal documentation instead of relying solely on model memory.
+> "Between these two analyses, the platform remembered two human decisions, refused to repeat what was already done, detected a $108k expansion opportunity buried inside a routine CRM status update, escalated a technical blocker to VP level because a CEO was about to speak publicly, and generated a co-marketing strategy — all from a 200-word update that a CSM would read in 60 seconds and file away.
+>
+> That is the difference between a tool that processes text and a platform that exercises decision intelligence."
 
 ---
 
-### Q3: Why Human Approval?
+## Judging Score Map for This Scenario
 
-**Answer:** Business decisions often have financial and operational consequences. Human oversight ensures accountability and trust.
+| Architecture Criterion (70%) | Evidence in This Demo |
+|---|---|
+| Dynamic Planner adapts between runs | Opportunity Agent becomes lead in Run 2; Risk Agent secondary |
+| Memory prevents repetition | Training and CEO summary not recommended again |
+| Multi-signal detection from one input | `onboarding_friction` AND `expansion_interest` in same transcript |
+| Deterministic Business Rules | VP escalation triggered by CEO conference rule |
+| RAG evidence grounding | Onboarding Playbook + Expansion Strategy doc both cited |
+| Agent specialization | Opportunity Agent does different work than Risk Agent |
 
----
-
-### Q4: How is this different from ChatGPT?
-
-**Answer:** ADIP is a platform, not a chatbot. It combines planning, multi-agent orchestration, enterprise knowledge retrieval, deterministic business rules, organizational memory, and explainable recommendations.
-
----
-
-### Q5: How can this be extended?
-
-**Answer:** By adding new agents, business rules, and knowledge sources. The Planner, Execution Engine, and Agent Framework remain unchanged.
-
----
-
-# 11. Demo Checklist
-
-Before recording:
-
-* ✅ Backend running
-* ✅ Frontend deployed
-* ✅ Knowledge base indexed
-* ✅ Planner working
-* ✅ Recommendations generated
-* ✅ Memory updating
-* ✅ UI polished
-* ✅ Architecture diagram ready
-* ✅ README completed
-* ✅ Demo script rehearsed
-
----
-
-# 12. Success Criteria
-
-A successful demo should leave judges with three key impressions:
-
-1. **This is a reusable platform, not a one-off application.**
-2. **The AI reasoning is explainable and grounded in enterprise knowledge.**
-3. **The architecture is modular, extensible, and practical for real-world enterprise use.**
-
----
-
-## ⭐ Final Review
-
-We've now built a complete documentation set that covers:
-
-* **00–01:** Vision and system architecture.
-* **02–04:** Backend, agent framework, and AI design.
-* **05–07:** Frontend, APIs, and persistence.
-* **08:** Mock enterprise environment.
-* **09:** Implementation roadmap.
-* **10:** Demo strategy and presentation.
-
+| Business Criterion (30%) | Evidence in This Demo |
+|---|---|
+| Real enterprise problem | Field worker resistance to digital tools is universal in construction |
+| Revenue impact surfaced | $36k → $108k expansion identified from a status CRM update |
+| Decision quality vs. individual CSM | Platform caught dual signal (complaint + opportunity) simultaneously |
+| Human-in-the-loop rationale | Co-marketing has legal/partnership implications — must be human-approved |
+| Platform reusability | Completely different industry and signal set from the Acme Corp scenario |
